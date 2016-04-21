@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Listener` struct in crate `transport`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Listener">
+
+    <title>transport::listener::Listener - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>transport</a>::<wbr><a href='index.html'>listener</a></p><script>window.sidebarCurrent = {name: 'Listener', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>transport</a>::<wbr><a href='index.html'>listener</a>::<wbr><a class='struct' href=''>Listener</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-1887' class='srclink' href='../../src/transport/src/listener.rs.html#264-272' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Listener&lt;M: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='struct' href='../../nat_traversal/mapping_context/struct.MappingContext.html' title='nat_traversal::mapping_context::MappingContext'>MappingContext</a>&gt; + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a>&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p>Listens on a set of listen endpoints and accepts incoming connections.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;M&gt; <a class='struct' href='../../transport/listener/struct.Listener.html' title='transport::listener::Listener'>Listener</a>&lt;M&gt; <span class='where'>where M: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='struct' href='../../nat_traversal/mapping_context/struct.MappingContext.html' title='nat_traversal::mapping_context::MappingContext'>MappingContext</a>&gt; + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a></span></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(mc: M) -&gt; <a class='struct' href='../../transport/listener/struct.Listener.html' title='transport::listener::Listener'>Listener</a>&lt;M&gt;</code></h4>
+<div class='docblock'><p>Create a new Listener which is not listening on any endpoints.</p>
+</div><h4 id='method.bind' class='method'><code>fn <a href='#method.bind' class='fnname'>bind</a>&lt;E&gt;(&amp;self, listen_endpoints: E, deadline: <a class='struct' href='https://doc.rust-lang.org/nightly/std/time/struct.Instant.html' title='std::time::Instant'>Instant</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../w_result/enum.WResult.html' title='w_result::WResult'>WResult</a>&lt;<a class='enum' href='../../transport/listen_endpoint/enum.ListenEndpoint.html' title='transport::listen_endpoint::ListenEndpoint'>ListenEndpoint</a>, <a class='enum' href='../../transport/listener/enum.ListenerBindEndpointWarning.html' title='transport::listener::ListenerBindEndpointWarning'>ListenerBindEndpointWarning</a>, <a class='enum' href='../../transport/listener/enum.ListenerBindEndpointError.html' title='transport::listener::ListenerBindEndpointError'>ListenerBindEndpointError</a>&lt;E::Err&gt;&gt;&gt; <span class='where'>where E: <a class='trait' href='../../transport/listen_endpoint/trait.ToListenEndpoints.html' title='transport::listen_endpoint::ToListenEndpoints'>ToListenEndpoints</a></span></code></h4>
+<div class='docblock'><p>Bind to all the endpoints that can be parsed from <code>listen_endpoints</code>.</p>
+</div><h4 id='method.add_external_endpoints' class='method'><code>fn <a href='#method.add_external_endpoints' class='fnname'>add_external_endpoints</a>&lt;E&gt;(&amp;self, listen_endpoint: <a class='enum' href='../../transport/listen_endpoint/enum.ListenEndpoint.html' title='transport::listen_endpoint::ListenEndpoint'>ListenEndpoint</a>, endpoints: E) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../../transport/listener/enum.ListenerAddExternalEndpointsError.html' title='transport::listener::ListenerAddExternalEndpointsError'>ListenerAddExternalEndpointsError</a>&lt;E::Err&gt;&gt; <span class='where'>where E: <a class='trait' href='../../transport/endpoint/trait.ToEndpoints.html' title='transport::endpoint::ToEndpoints'>ToEndpoints</a></span></code></h4>
+<div class='docblock'><p>Register an external endpoint with the <code>Listener</code>. This is for informing the <code>Listener</code>
+about endpoints that it could not discover itself using the <code>MappingContext</code>, such as
+manually configured external ports on a router.</p>
+</div><h4 id='method.external_endpoints' class='method'><code>fn <a href='#method.external_endpoints' class='fnname'>external_endpoints</a>(&amp;self) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../../transport/endpoint/enum.Endpoint.html' title='transport::endpoint::Endpoint'>Endpoint</a>&gt;</code></h4>
+<div class='docblock'><p>Retrieve a list of all our known external endpoints.</p>
+</div><h4 id='method.stop' class='method'><code>fn <a href='#method.stop' class='fnname'>stop</a>(&amp;self)</code></h4>
+<div class='docblock'><p>Cause any concurrent call to <code>Listener::accept</code> to unblock and return <code>None</code></p>
+</div><h4 id='method.accept' class='method'><code>fn <a href='#method.accept' class='fnname'>accept</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../transport/stream/struct.Stream.html' title='transport::stream::Stream'>Stream</a>, <a class='enum' href='../../transport/listener/enum.ListenerAcceptError.html' title='transport::listener::ListenerAcceptError'>ListenerAcceptError</a>&gt;&gt;</code></h4>
+<div class='docblock'><p>Block until there is a new incoming connection or <code>Listener::stop</code> is called.</p>
+</div><h4 id='method.gen_rendezvous_info' class='method'><code>fn <a href='#method.gen_rendezvous_info' class='fnname'>gen_rendezvous_info</a>(&amp;self, deadline: <a class='struct' href='https://doc.rust-lang.org/nightly/std/time/struct.Instant.html' title='std::time::Instant'>Instant</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a><a class='struct' href='../../transport/struct.PrivRendezvousInfo.html' title='transport::PrivRendezvousInfo'>PrivRendezvousInfo</a>, <a class='struct' href='../../transport/struct.PubRendezvousInfo.html' title='transport::PubRendezvousInfo'>PubRendezvousInfo</a>, <a class='struct' href='../../transport/stream/struct.StreamGenRendezvousInfoDiagnostics.html' title='transport::stream::StreamGenRendezvousInfoDiagnostics'>StreamGenRendezvousInfoDiagnostics</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></code></h4>
+<div class='docblock'><p>Generate rendezvous info that can be used to connect to this listener set. The returned
+<code>PrivRendezvousInfo</code> should be used in a later call to <code>Listener::rendezvous_connect</code>. The
+<code>PubRendezvousInfo</code> should be swapped with that of the remote peer. The
+<code>StreamGenRendezvousInfoDiagnostics</code> contains information that may be useful in diagnosing
+problems with using this rendezvous info.</p>
+</div><h4 id='method.rendezvous_connect' class='method'><code>fn <a href='#method.rendezvous_connect' class='fnname'>rendezvous_connect</a>(&amp;self, our_priv_info: <a class='struct' href='../../transport/struct.PrivRendezvousInfo.html' title='transport::PrivRendezvousInfo'>PrivRendezvousInfo</a>, their_pub_info: <a class='struct' href='../../transport/struct.PubRendezvousInfo.html' title='transport::PubRendezvousInfo'>PubRendezvousInfo</a>, deadline: <a class='struct' href='https://doc.rust-lang.org/nightly/std/time/struct.Instant.html' title='std::time::Instant'>Instant</a>) -&gt; <a class='enum' href='../../w_result/enum.WResult.html' title='w_result::WResult'>WResult</a>&lt;<a class='struct' href='../../transport/stream/struct.Stream.html' title='transport::stream::Stream'>Stream</a>, <a class='enum' href='../../transport/stream/enum.StreamRendezvousConnectWarning.html' title='transport::stream::StreamRendezvousConnectWarning'>StreamRendezvousConnectWarning</a>, <a class='enum' href='../../transport/stream/enum.StreamRendezvousConnectError.html' title='transport::stream::StreamRendezvousConnectError'>StreamRendezvousConnectError</a>&gt;</code></h4>
+<div class='docblock'><p>Perform a rendezvous connection, making use of the listeners in this listener set. This
+function should be called by both peers wishing to connect. Both peers will attempt to
+connect to each others listeners while also attempting to make nat-traversed connections.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "transport";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Protocol","Enum representing supported transport protocols"]],"fn":[["scheme_type_mapper","Scheme type mapper function for transport protocol schemes defined by this crate. For use with `url::UrlParser` from the `url` crate."]],"struct":[["ProtocolParseError","Errors returned by `FromStr::from_str` for `Protocol`."]]});
