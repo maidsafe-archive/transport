@@ -1,7 +1,13 @@
 [package]
 name = "transport"
 version = "0.1.0"
-authors = ["Andrew Cann <shum@canndrew.org>"]
+authors = ["MaidSafe Developers <dev@maidsafe.net>"]
+descriptions = "Transport abstraction library with nat traversal"
+documentation = "http://maidsafe.net/transport/latest"
+homepage = "http://maidsafe.net"
+license = "GPL-3.0"
+readme = "README.md"
+repository = "https://github.com/maidsafe/transport"
 
 [dependencies]
 socket_addr = "~0.1.0"
