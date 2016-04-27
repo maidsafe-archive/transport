@@ -27,6 +27,7 @@ use rendezvous_info::{PubRendezvousInfo, PrivRendezvousInfo, PrivTcpInfo, PrivUd
                       RENDEZVOUS_INFO_EXPIRY_DURATION_SECS};
 
 /// Contains protocol information about a stream. See the `StreamInfo` type for more info.
+#[derive(Debug, Clone)]
 pub enum StreamProtocolInfo {
     /// A TCP stream.
     Tcp {
@@ -45,6 +46,7 @@ pub enum StreamProtocolInfo {
 }
 
 /// Contains info about a `Stream`. The result of calling `Stream::info`.
+#[derive(Debug, Clone)]
 pub struct StreamInfo {
     /// Protocol information about the stream.
     pub protocol: StreamProtocolInfo,
@@ -89,7 +91,7 @@ struct Buffer {
 }
 
 /// Contains the inner, protocol-specific part of the stream.
-enum StreamInner {
+enum InStreamInner {
     Tcp {
         stream: TcpStream,
         local_addr: SocketAddr,
@@ -103,11 +105,28 @@ enum StreamInner {
     */
 }
 
-/// A transport-agnostic connection to a remote peer.
-pub struct Stream {
-    protocol_inner: StreamInner,
+struct OutStreamInner {
     buffer: Arc<Buffer>,
     _writer_thread: RaiiThreadJoiner,
+}
+
+/// A transport-agnostic connection to a remote peer.
+pub struct Stream {
+    in_stream: InStreamInner,
+    out_stream: OutStreamInner,
+    connection_id: u64,
+}
+
+/// A transport-agnostic outgoing connection to a remote peer.
+pub struct OutStream {
+    inner: OutStreamInner,
+    stream_protocol_info: StreamProtocolInfo,
+    connection_id: u64,
+}
+
+/// A transport-agnostic incoming  connection to a remote peer.
+pub struct InStream {
+    inner: InStreamInner,
     connection_id: u64,
 }
 
@@ -427,11 +446,11 @@ impl fmt::Display for StreamRendezvousConnectError {
     }
 }
 
-impl Stream {
+impl InStream {
     /// Retreive information about this stream.
     pub fn info(&self) -> StreamInfo {
-        match self.protocol_inner {
-            StreamInner::Tcp {
+        match self.inner {
+            InStreamInner::Tcp {
                 local_addr,
                 peer_addr,
                 ..
@@ -443,6 +462,50 @@ impl Stream {
                 connection_id: self.connection_id,
             }
         }
+    }
+}
+
+impl OutStream {
+    /// Retreive information about this stream.
+    pub fn info(&self) -> StreamInfo {
+        StreamInfo {
+            protocol: self.stream_protocol_info.clone(),
+            connection_id: self.connection_id,
+        }
+    }
+}
+
+impl Stream {
+    /// Retreive information about this stream.
+    pub fn info(&self) -> StreamInfo {
+        match self.in_stream {
+            InStreamInner::Tcp {
+                local_addr,
+                peer_addr,
+                ..
+            } => StreamInfo {
+                protocol: StreamProtocolInfo::Tcp {
+                    local_addr: local_addr,
+                    peer_addr: peer_addr,
+                },
+                connection_id: self.connection_id,
+            }
+        }
+    }
+
+    /// Split the `Stream` into a writer and reader pair.
+    pub fn split(self) -> (OutStream, InStream) {
+        let info = self.info();
+        let in_stream = InStream {
+            inner: self.in_stream,
+            connection_id: self.connection_id,
+        };
+        let out_stream = OutStream {
+            inner: self.out_stream,
+            stream_protocol_info: info.protocol,
+            connection_id: self.connection_id,
+        };
+        (out_stream, in_stream)
     }
 
     /// Generate rendezvous info which can be used to perform a rendezvous connection.
@@ -872,13 +935,15 @@ impl Stream {
             };
         }));
         Ok(Stream {
-            protocol_inner: StreamInner::Tcp {
+            in_stream: InStreamInner::Tcp {
                 stream: stream,
                 local_addr: SocketAddr(local_addr),
                 peer_addr: SocketAddr(peer_addr),
             },
-            buffer: buffer,
-            _writer_thread: writer_thread,
+            out_stream: OutStreamInner {
+                buffer: buffer,
+                _writer_thread: writer_thread,
+            },
             connection_id: connection_id,
         })
     }
@@ -889,7 +954,7 @@ impl Stream {
     */
 }
 
-impl Drop for Stream {
+impl Drop for OutStreamInner {
     fn drop(&mut self) {
         let mut inner = unwrap_result!(self.buffer.inner.lock());
 
@@ -903,8 +968,20 @@ impl Drop for Stream {
 
 impl Read for Stream {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        match self.protocol_inner {
-            StreamInner::Tcp { ref mut stream, .. } => {
+        self.in_stream.read(buf)
+    }
+}
+
+impl Read for InStream {
+    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+        self.inner.read(buf)
+    }
+}
+
+impl Read for InStreamInner {
+    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+        match *self {
+            InStreamInner::Tcp { ref mut stream, .. } => {
                 stream.read(buf)
             },
         }
@@ -912,6 +989,26 @@ impl Read for Stream {
 }
 
 impl Write for Stream {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        self.out_stream.write(buf)
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        self.out_stream.flush()
+    }
+}
+
+impl Write for OutStream {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        self.inner.write(buf)
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        self.inner.flush()
+    }
+}
+
+impl Write for OutStreamInner {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         let mut inner = unwrap_result!(self.buffer.inner.lock());
         if let Some(e) = inner.error.take() {

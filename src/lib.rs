@@ -53,7 +53,7 @@ mod test_utils;
 pub use protocol::Protocol;
 pub use endpoint::{Endpoint, ToEndpoints};
 pub use listen_endpoint::{ListenEndpoint, ToListenEndpoints};
-pub use stream::{Stream, StreamInfo};
+pub use stream::{Stream, OutStream, InStream, StreamInfo};
 pub use listener::Listener;
 pub use rendezvous_info::{PubRendezvousInfo, PrivRendezvousInfo};
 
