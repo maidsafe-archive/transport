@@ -8,17 +8,20 @@ use endpoint::Endpoint;
 
 pub const RENDEZVOUS_INFO_EXPIRY_DURATION_SECS: u64 = 300;
 
+#[derive(Debug)]
 pub struct PrivTcpInfo {
     pub socket: net2::TcpBuilder,
     pub info: nat_traversal::PrivRendezvousInfo,
 }
 
+#[derive(Debug)]
 pub struct PrivUdpInfo {
     pub socket: UdpSocket,
     pub info: nat_traversal::PrivRendezvousInfo,
 }
 
 /// The private half of a rendezvous info pair. Used to perform rendezvous connections.
+#[derive(Debug)]
 pub struct PrivRendezvousInfo {
     #[doc(hidden)]
     pub priv_tcp_info: Option<PrivTcpInfo>,
@@ -32,6 +35,7 @@ pub struct PrivRendezvousInfo {
 
 /// The public half of a rendezvous info pair. Share this object with the remote peer and use their
 /// `PubRendezvousInfo` to perform a rendezvous connect.
+#[derive(Debug, RustcEncodable, RustcDecodable)]
 pub struct PubRendezvousInfo {
     #[doc(hidden)]
     pub pub_tcp_info: Option<nat_traversal::PubRendezvousInfo>,
