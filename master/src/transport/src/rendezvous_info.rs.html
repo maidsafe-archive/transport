@@ -86,6 +86,10 @@
 <span id="43">43</span>
 <span id="44">44</span>
 <span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>::<span class='ident'>UdpSocket</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>time</span>::<span class='ident'>Instant</span>;
@@ -97,17 +101,20 @@
 
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>RENDEZVOUS_INFO_EXPIRY_DURATION_SECS</span>: <span class='ident'>u64</span> <span class='op'>=</span> <span class='number'>300</span>;
 
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PrivTcpInfo</span> {
     <span class='kw'>pub</span> <span class='ident'>socket</span>: <span class='ident'>net2</span>::<span class='ident'>TcpBuilder</span>,
     <span class='kw'>pub</span> <span class='ident'>info</span>: <span class='ident'>nat_traversal</span>::<span class='ident'>PrivRendezvousInfo</span>,
 }
 
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PrivUdpInfo</span> {
     <span class='kw'>pub</span> <span class='ident'>socket</span>: <span class='ident'>UdpSocket</span>,
     <span class='kw'>pub</span> <span class='ident'>info</span>: <span class='ident'>nat_traversal</span>::<span class='ident'>PrivRendezvousInfo</span>,
 }
 
 <span class='doccomment'>/// The private half of a rendezvous info pair. Used to perform rendezvous connections.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PrivRendezvousInfo</span> {
     <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
     <span class='kw'>pub</span> <span class='ident'>priv_tcp_info</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>PrivTcpInfo</span><span class='op'>&gt;</span>,
@@ -121,6 +128,7 @@
 
 <span class='doccomment'>/// The public half of a rendezvous info pair. Share this object with the remote peer and use their</span>
 <span class='doccomment'>/// `PubRendezvousInfo` to perform a rendezvous connect.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>RustcEncodable</span>, <span class='ident'>RustcDecodable</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PubRendezvousInfo</span> {
     <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
     <span class='kw'>pub</span> <span class='ident'>pub_tcp_info</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>nat_traversal</span>::<span class='ident'>PubRendezvousInfo</span><span class='op'>&gt;</span>,
