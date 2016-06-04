@@ -3,9 +3,9 @@ name = "transport"
 version = "0.1.0"
 authors = ["MaidSafe Developers <dev@maidsafe.net>"]
 description = "Transport abstraction library with nat traversal"
-documentation = "http://maidsafe.net/transport/latest"
+documentation = "http://docs.maidsafe.net/transport/latest"
 homepage = "http://maidsafe.net"
-license = "GPL-3.0"
+license = "GPL-3.0/MaidSafe.net Commercial License 1.0"
 readme = "README.md"
 repository = "https://github.com/maidsafe/transport"
 
